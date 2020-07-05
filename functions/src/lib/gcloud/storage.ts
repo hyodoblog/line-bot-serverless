@@ -5,7 +5,7 @@ import * as Config from 'firebase-functions/lib/config'
 
 const storage = new Storage()
 
-const bucketName = Config.config().someservice.bucket_name as string
+const bucketName = Config.config().env.bucket_name as string
 
 export const storageUploadToBuffer = async (
   buffer: Buffer,
