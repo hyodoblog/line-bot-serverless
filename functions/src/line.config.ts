@@ -1,9 +1,9 @@
 import * as Line from '@line/bot-sdk'
 import * as Types from '@line/bot-sdk/dist/types'
-import * as functions from 'firebase-functions'
+import * as Config from 'firebase-functions/lib/config'
 
-const accessToken = functions.config().someservice.access_token as string
-const channelSecret = functions.config().someservice.channel_secret as string
+const accessToken = Config.config().someservice.access_token as string
+const channelSecret = Config.config().someservice.channel_secret as string
 
 const config = {
   channelAccessToken: accessToken,
