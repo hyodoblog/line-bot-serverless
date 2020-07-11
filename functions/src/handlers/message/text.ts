@@ -1,11 +1,17 @@
-import { client, Line } from '../../line.config'
-import { makeReplyMessages } from '../../lib/line'
+import { Line } from '../../line.config'
+import { datastoreGetFindBy } from '../../lib/gcloud/datastore'
+import { dsKindUser } from '../../models'
+import { User } from '../../models/user'
+// import * as status from '../../status'
 
-export const text = async (event: Line.MessageEvent): Promise<void> => {
-  const { replyToken } = event
-  const { message } = event as {
-    message: Line.TextEventMessage
-  }
+export const text = async (event: Line.MessageEvent): Promise<string> => {
+  const user: User | undefined = await datastoreGetFindBy(
+    dsKindUser,
+    'userId',
+    event.source.userId
+  )
 
-  await client.replyMessage(replyToken, makeReplyMessages(message.text))
+  console.log(user)
+
+  return ''
 }

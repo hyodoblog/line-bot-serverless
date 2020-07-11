@@ -1,27 +1,29 @@
 import { Datastore } from '@google-cloud/datastore'
 import { Entity, Entities } from '@google-cloud/datastore/build/src/entity'
 
-const datastore = new Datastore()
+export const datastore = new Datastore()
+export const transaction = datastore.transaction()
 
 export const datastoreInsert = async (
   kind: string,
-  data: Entity
+  data: Entities
 ): Promise<void> => {
-  await datastoreUpdate(null, kind, data)
+  data = Array.isArray(data) ? data : [data]
+  const key = datastore.key(kind)
+  const entities: Entities = []
+  for (let i = 0; i < data.length; i++) {
+    entities.push({ key, data: data[i] })
+  }
+  console.log(entities)
+  await datastore.save(entities)
 }
 
 export const datastoreUpdate = async (
-  id: string | null,
   kind: string,
   data: Entity
 ): Promise<void> => {
-  let key
-  if (id) {
-    key = datastore.key([kind, parseInt(id, 10)])
-  } else {
-    key = datastore.key(kind)
-  }
-
+  const id = data[datastore.KEY].id
+  const key = datastore.key([kind, parseInt(id, 10)])
   await datastore.save({ key, data })
 }
 
@@ -50,14 +52,7 @@ export const datastoreGetFindBy = async (
   columnName: string | null,
   data: Entity | null
 ): Promise<Entity> => {
-  let query
-  if (columnName) {
-    query = datastore.createQuery(kind).filter(columnName, '=', data)
-  } else {
-    query = datastore.createQuery(kind)
-  }
-
-  const [entities] = await datastore.runQuery(query)
+  const entities = await datastoreGetWhere(kind, columnName, data)
   return entities[0]
 }
 
