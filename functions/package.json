@@ -20,7 +20,8 @@
     "@line/bot-sdk": "^7.0.0",
     "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.6.1"
+    "firebase-functions": "^3.6.1",
+    "ken-all": "^0.2.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.6",
